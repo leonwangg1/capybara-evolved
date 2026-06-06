@@ -1,0 +1,73 @@
+[gd_scene load_steps=7 format=3 uid="uid://player_scene"]
+
+[ext_resource type="Script" path="res://scripts/player/player.gd" id="1_player_script"]
+[ext_resource type="Script" path="res://scripts/components/health_component.gd" id="2_health"]
+[ext_resource type="Script" path="res://scripts/components/hurtbox_component.gd" id="3_hurtbox"]
+[ext_resource type="Script" path="res://scripts/player/weapon_manager.gd" id="4_weapon_mgr"]
+[ext_resource type="SpriteFrames" path="res://assets/sprites/player/hero_run.tres" id="5_sprite_side"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/standing-front.png" id="6_stand_front"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_collision"]
+radius = 16.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hurtbox"]
+radius = 14.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pickup"]
+radius = 80.0
+
+[node name="Player" type="CharacterBody2D" groups=["player"]]
+collision_layer = 1
+collision_mask = 2
+script = ExtResource("1_player_script")
+move_speed = 300.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_collision")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.64, 0.64)
+sprite_frames = ExtResource("5_sprite_side")
+animation = &"run"
+
+[node name="StandingFront" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(0, 2.4)
+scale = Vector2(0.846, 0.846)
+texture = ExtResource("6_stand_front")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position_smoothing_enabled = false
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("2_health")
+max_hp = 100
+
+[node name="HurtboxComponent" type="Area2D" parent="."]
+collision_layer = 1
+collision_mask = 2
+monitorable = true
+monitoring = true
+script = ExtResource("3_hurtbox")
+health_component_path = NodePath("../HealthComponent")
+
+[node name="HurtboxShape" type="CollisionShape2D" parent="HurtboxComponent"]
+shape = SubResource("CircleShape2D_hurtbox")
+
+[node name="WeaponManager" type="Node2D" parent="."]
+script = ExtResource("4_weapon_mgr")
+
+[node name="PickupRadius" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 16
+monitoring = true
+monitorable = false
+
+[node name="PickupShape" type="CollisionShape2D" parent="PickupRadius"]
+shape = SubResource("CircleShape2D_pickup")
+
+[node name="InvincibilityTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[connection signal="timeout" from="InvincibilityTimer" to="." method="_on_invincibility_timer_timeout"]

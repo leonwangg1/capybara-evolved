@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://acorn_bomb_projectile"]
+
+[ext_resource type="Script" path="res://scripts/weapons/acorn_bomb_projectile.gd" id="1_acorn_bomb"]
+
+[node name="AcornBombProjectile" type="Node2D"]
+script = ExtResource("1_acorn_bomb")

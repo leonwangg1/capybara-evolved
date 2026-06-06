@@ -1,0 +1,38 @@
+[gd_scene load_steps=6 format=3 uid="uid://game_scene"]
+
+[ext_resource type="Script" path="res://scripts/main/game.gd" id="1_game_script"]
+[ext_resource type="PackedScene" path="res://scenes/environment/arena.tscn" id="2_arena"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="3_player"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="4_hud"]
+[ext_resource type="Script" path="res://scripts/enemies/enemy_spawner.gd" id="5_spawner"]
+[ext_resource type="Script" path="res://scripts/enemies/wave_manager.gd" id="6_wave_manager"]
+[ext_resource type="PackedScene" path="res://scenes/ui/level_up_panel.tscn" id="7_level_up"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_game_script")
+
+[node name="Arena" parent="." instance=ExtResource("2_arena")]
+
+[node name="YSortGroup" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Player" parent="YSortGroup" instance=ExtResource("3_player")]
+position = Vector2(1920, 1080)
+
+[node name="Enemies" type="Node2D" parent="YSortGroup" groups=["enemies_container"]]
+
+[node name="Projectiles" type="Node2D" parent="." groups=["projectiles_container"]]
+
+[node name="Pickups" type="Node2D" parent="." groups=["pickups_container"]]
+
+[node name="Effects" type="Node2D" parent="." groups=["effects_container"]]
+
+[node name="EnemySpawner" type="Node" parent="." groups=["spawner"]]
+script = ExtResource("5_spawner")
+
+[node name="WaveManager" type="Node" parent="."]
+script = ExtResource("6_wave_manager")
+
+[node name="HUD" parent="." instance=ExtResource("4_hud")]
+
+[node name="LevelUpPanel" parent="." instance=ExtResource("7_level_up")]

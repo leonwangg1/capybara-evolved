@@ -19,4 +19,8 @@ Thumbs.db
 
 # Build
 export/
+build/
 *.pck
+
+# Vercel
+.vercel/
